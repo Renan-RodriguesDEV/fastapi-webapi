@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -11,6 +11,11 @@ class UserSchema(BaseModel):
 class UserSchemaPublic(BaseModel):
     id: int
     username: str
+
+
+class UserSchemaPatch(BaseModel):
+    username: Optional[str] = None
+    password: Optional[str] = None
 
 
 class UserSchemaList(BaseModel):

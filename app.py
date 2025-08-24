@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from database.config.config import get_session
 from database.models.user import User
 from database.schemas.token import Token
-from routes.auth import create_acess_token, verify_password
+from security.auth import create_acess_token, verify_password
 from routes.users import router as user_router
 
 app = FastAPI(
