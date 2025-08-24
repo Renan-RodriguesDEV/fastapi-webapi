@@ -15,4 +15,5 @@ class User(Base):
         self.password = password
 
 
+# Cria as tabelas no banco de dados
 Base.metadata.create_all(get_engine())
