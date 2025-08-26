@@ -16,11 +16,11 @@ SECRET_KEY = "my-secret-key"
 # Costante de tempo em minutos para o exp
 ACCESS_TOKEN_EXPIRE_TIME = 30
 
-oauth2_schema = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
 def create_acess_token(data: dict, expire_delta: datetime.timedelta | None = None):
-    """_summary_
+    """Cria um token de acesso (JWT)
 
     Args:
         data (dict): dicionario com as chaves sub
@@ -44,9 +44,23 @@ def create_acess_token(data: dict, expire_delta: datetime.timedelta | None = Non
 
 # o Depends é uma injeção de dependencia ele chama a função e obtem seu valor
 # Depends: "Antes de executar esta função, execute primeiro essa outra função e passe-me o resultado".
+# O oauth2_schema é uma instância de OAuth2PasswordBearer que extrai o token do cabeçalho Authorization
 def get_current_user(
     session: Session = Depends(get_session), token: str = Depends(oauth2_schema)
 ):
+    """Obtém o usuário atual a partir do token JWT.
+
+    Args:
+        session (Session, optional): Sessão do banco de dados. Defaults to Depends(get_session).
+        token (str, optional): Token JWT. Defaults to Depends(oauth2_schema).
+
+    Raises:
+        exception_unauthorized: Se a validação do token falhar.
+        exception_unauthorized: Se o usuário não for encontrado.
+
+    Returns:
+        User: O usuário atual.
+    """
     exception_unauthorized = HTTPException(
         status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
